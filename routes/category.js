@@ -21,5 +21,33 @@ router.post("/submitCategory_Data",function (req, res) {
     res.status(200).json({ message: "Data submitted successfully" });
   });
 });
+router.get("/fetch_Categories", function (req, res) {
+    const sql = "SELECT * FROM category"; // Adjust the SQL query as needed
+  
+    pool.query(sql, function (err, result) {
+      if (err) {
+        console.error("Error fetching data:", err);
+        return res.status(500).json({ message: "Failed to fetch data" });
+      }
+      res.status(200).json({data:result,message:"categories Fetch Succesfully"});
+    });
+  });
+
+  router.delete("/delete_Category", function (req, res) {
+  const categoryId = req.body.id;
+  const sql = "DELETE FROM category WHERE category_id = ?"; // Adjust the SQL query as needed
+
+  pool.query(sql, [categoryId], function (err, result) {
+    if (err) {
+      console.error("Error deleting data:", err);
+      return res.status(500).json({ message: "Failed to delete data" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    res.status(200).json({ message: "Category deleted successfully" });
+  });
+});
+
 
 module.exports = router;
