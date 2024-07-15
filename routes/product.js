@@ -23,7 +23,7 @@ router.post("/add-product", function (req, res) {
     created_by,
   } = req.body;
 
-  console.log("backend data",req.body);
+  console.log("backend data", req.body);
   pool.query(
     `INSERT INTO Products (product_name, product_description, price, discount, stock, trending, new_arrival, top_selling, category, occasion, craft, fabric, color, origin, brand, created_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
@@ -200,11 +200,11 @@ router.post("/add-occasion", function (req, res) {
 });
 
 // Fetch all occasions
-router.get('/fetch-occasions', (req, res) => {
-  pool.query('SELECT * FROM Occasion', (error, results) => {
+router.get("/fetch-occasions", (req, res) => {
+  pool.query("SELECT * FROM Occasion", (error, results) => {
     if (error) {
-      console.error('Error fetching occasions:', error);
-      res.status(500).json({ message: 'Error fetching occasions' });
+      console.error("Error fetching occasions:", error);
+      res.status(500).json({ message: "Error fetching occasions" });
     } else {
       res.status(200).json({ data: results });
     }
@@ -212,8 +212,9 @@ router.get('/fetch-occasions', (req, res) => {
 });
 
 // Update an occasion
-router.put('/update-occasion/:id', (req, res) => {
-  const { occasion_name, occasion_description, started_at, ended_at } = req.body;
+router.put("/update-occasion/:id", (req, res) => {
+  const { occasion_name, occasion_description, started_at, ended_at } =
+    req.body;
   const { id } = req.params;
 
   pool.query(
@@ -224,34 +225,37 @@ router.put('/update-occasion/:id', (req, res) => {
         console.error(`Error updating occasion ${id}:`, error);
         res.status(500).json({ message: `Error updating occasion ${id}` });
       } else {
-        res.status(200).json({ message: `Occasion ${id} updated successfully` });
+        res
+          .status(200)
+          .json({ message: `Occasion ${id} updated successfully` });
       }
     }
   );
 });
 
 // Delete an occasion
-router.delete('/delete-occasion/:id', (req, res) => {
+router.delete("/delete-occasion/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM Occasion WHERE occasion_id=?', [id], (error, results) => {
-    if (error) {
-      console.error(`Error deleting occasion ${id}:`, error);
-      res.status(500).json({ message: `Error deleting occasion ${id}` });
-    } else {
-      res.status(200).json({ message: `Occasion ${id} deleted successfully` });
+  pool.query(
+    "DELETE FROM Occasion WHERE occasion_id=?",
+    [id],
+    (error, results) => {
+      if (error) {
+        console.error(`Error deleting occasion ${id}:`, error);
+        res.status(500).json({ message: `Error deleting occasion ${id}` });
+      } else {
+        res
+          .status(200)
+          .json({ message: `Occasion ${id} deleted successfully` });
+      }
     }
-  });
+  );
 });
-
 
 // Endpoint for adding a craft
 router.post("/add-craft", function (req, res) {
-  const {
-    craft_name,
-    craft_description,
-    created_by,
-  } = req.body;
+  const { craft_name, craft_description, created_by } = req.body;
 
   pool.query(
     `INSERT INTO Craft (craft_name, craft_description, created_by) VALUES (?, ?, ?)`,
@@ -271,11 +275,11 @@ router.post("/add-craft", function (req, res) {
 });
 
 // Fetch all crafts
-router.get('/fetch-crafts', (req, res) => {
-  pool.query('SELECT * FROM Craft', (error, results) => {
+router.get("/fetch-crafts", (req, res) => {
+  pool.query("SELECT * FROM Craft", (error, results) => {
     if (error) {
-      console.error('Error fetching crafts:', error);
-      res.status(500).json({ message: 'Error fetching crafts' });
+      console.error("Error fetching crafts:", error);
+      res.status(500).json({ message: "Error fetching crafts" });
     } else {
       res.status(200).json({ data: results });
     }
@@ -283,7 +287,7 @@ router.get('/fetch-crafts', (req, res) => {
 });
 
 // Update a craft
-router.put('/update-craft/:id', (req, res) => {
+router.put("/update-craft/:id", (req, res) => {
   const { craft_name, craft_description } = req.body;
   const { id } = req.params;
 
@@ -302,10 +306,10 @@ router.put('/update-craft/:id', (req, res) => {
 });
 
 // Delete a craft
-router.delete('/delete-craft/:id', (req, res) => {
+router.delete("/delete-craft/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM Craft WHERE craft_id=?', [id], (error, results) => {
+  pool.query("DELETE FROM Craft WHERE craft_id=?", [id], (error, results) => {
     if (error) {
       console.error(`Error deleting craft ${id}:`, error);
       res.status(500).json({ message: `Error deleting craft ${id}` });
@@ -317,11 +321,7 @@ router.delete('/delete-craft/:id', (req, res) => {
 
 // Endpoint for adding fabric
 router.post("/add-fabric", function (req, res) {
-  const {
-    fabric_name,
-    fabric_description,
-    created_by,
-  } = req.body;
+  const { fabric_name, fabric_description, created_by } = req.body;
 
   pool.query(
     `INSERT INTO Fabric (fabric_name, fabric_description, created_by) VALUES (?, ?, ?)`,
@@ -341,11 +341,11 @@ router.post("/add-fabric", function (req, res) {
 });
 
 // Fetch all fabrics
-router.get('/fetch-fabrics', (req, res) => {
-  pool.query('SELECT * FROM Fabric', (error, results) => {
+router.get("/fetch-fabrics", (req, res) => {
+  pool.query("SELECT * FROM Fabric", (error, results) => {
     if (error) {
-      console.error('Error fetching fabrics:', error);
-      res.status(500).json({ message: 'Error fetching fabrics' });
+      console.error("Error fetching fabrics:", error);
+      res.status(500).json({ message: "Error fetching fabrics" });
     } else {
       res.status(200).json({ data: results });
     }
@@ -353,7 +353,7 @@ router.get('/fetch-fabrics', (req, res) => {
 });
 
 // Update a fabric
-router.put('/update-fabric/:id', (req, res) => {
+router.put("/update-fabric/:id", (req, res) => {
   const { fabric_name, fabric_description } = req.body;
   const { id } = req.params;
 
@@ -372,10 +372,10 @@ router.put('/update-fabric/:id', (req, res) => {
 });
 
 // Delete a fabric
-router.delete('/delete-fabric/:id', (req, res) => {
+router.delete("/delete-fabric/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM Fabric WHERE fabric_id=?', [id], (error, results) => {
+  pool.query("DELETE FROM Fabric WHERE fabric_id=?", [id], (error, results) => {
     if (error) {
       console.error(`Error deleting fabric ${id}:`, error);
       res.status(500).json({ message: `Error deleting fabric ${id}` });
@@ -387,11 +387,7 @@ router.delete('/delete-fabric/:id', (req, res) => {
 
 // Endpoint for adding color
 router.post("/add-color", function (req, res) {
-  const {
-    color_name,
-    color_code,
-    created_by,
-  } = req.body;
+  const { color_name, color_code, created_by } = req.body;
 
   pool.query(
     `INSERT INTO Color (color_name, color_code, created_by) VALUES (?, ?, ?)`,
@@ -411,11 +407,11 @@ router.post("/add-color", function (req, res) {
 });
 
 // Fetch all colors
-router.get('/fetch-colors', (req, res) => {
-  pool.query('SELECT * FROM Color', (error, results) => {
+router.get("/fetch-colors", (req, res) => {
+  pool.query("SELECT * FROM Color", (error, results) => {
     if (error) {
-      console.error('Error fetching colors:', error);
-      res.status(500).json({ message: 'Error fetching colors' });
+      console.error("Error fetching colors:", error);
+      res.status(500).json({ message: "Error fetching colors" });
     } else {
       res.status(200).json({ data: results });
     }
@@ -423,7 +419,7 @@ router.get('/fetch-colors', (req, res) => {
 });
 
 // Update a color
-router.put('/update-color/:id', (req, res) => {
+router.put("/update-color/:id", (req, res) => {
   const { color_name, color_code } = req.body;
   const { id } = req.params;
 
@@ -442,10 +438,10 @@ router.put('/update-color/:id', (req, res) => {
 });
 
 // Delete a color
-router.delete('/delete-color/:id', (req, res) => {
+router.delete("/delete-color/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM Color WHERE color_id=?', [id], (error, results) => {
+  pool.query("DELETE FROM Color WHERE color_id=?", [id], (error, results) => {
     if (error) {
       console.error(`Error deleting color ${id}:`, error);
       res.status(500).json({ message: `Error deleting color ${id}` });
@@ -455,15 +451,10 @@ router.delete('/delete-color/:id', (req, res) => {
   });
 });
 
-
 // Endpoint for adding origin
 router.post("/add-origin", function (req, res) {
-  const {
-    country_name,
-    region_name,
-    origin_description,
-    created_by,
-  } = req.body;
+  const { country_name, region_name, origin_description, created_by } =
+    req.body;
 
   pool.query(
     `INSERT INTO Origin (country_name, region_name, origin_description, created_by) VALUES (?, ?, ?, ?)`,
@@ -483,11 +474,11 @@ router.post("/add-origin", function (req, res) {
 });
 
 // Fetch all origins
-router.get('/fetch-origins', (req, res) => {
-  pool.query('SELECT * FROM Origin', (error, results) => {
+router.get("/fetch-origins", (req, res) => {
+  pool.query("SELECT * FROM Origin", (error, results) => {
     if (error) {
-      console.error('Error fetching origins:', error);
-      res.status(500).json({ message: 'Error fetching origins' });
+      console.error("Error fetching origins:", error);
+      res.status(500).json({ message: "Error fetching origins" });
     } else {
       res.status(200).json({ data: results });
     }
@@ -495,7 +486,7 @@ router.get('/fetch-origins', (req, res) => {
 });
 
 // Update an origin
-router.put('/update-origin/:id', (req, res) => {
+router.put("/update-origin/:id", (req, res) => {
   const { country_name, region_name, origin_description } = req.body;
   const { id } = req.params;
 
@@ -514,10 +505,10 @@ router.put('/update-origin/:id', (req, res) => {
 });
 
 // Delete an origin
-router.delete('/delete-origin/:id', (req, res) => {
+router.delete("/delete-origin/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM Origin WHERE origin_id=?', [id], (error, results) => {
+  pool.query("DELETE FROM Origin WHERE origin_id=?", [id], (error, results) => {
     if (error) {
       console.error(`Error deleting origin ${id}:`, error);
       res.status(500).json({ message: `Error deleting origin ${id}` });
@@ -527,14 +518,9 @@ router.delete('/delete-origin/:id', (req, res) => {
   });
 });
 
-
 // Endpoint for adding brand
 router.post("/add-brand", function (req, res) {
-  const {
-    brand_name,
-    brand_description,
-    created_by,
-  } = req.body;
+  const { brand_name, brand_description, created_by } = req.body;
 
   pool.query(
     `INSERT INTO Brand (brand_name, brand_description,  created_by) VALUES (?, ?, ?)`,
@@ -554,11 +540,11 @@ router.post("/add-brand", function (req, res) {
 });
 
 // Fetch all brands
-router.get('/fetch-brands', (req, res) => {
-  pool.query('SELECT * FROM Brand', (error, results) => {
+router.get("/fetch-brands", (req, res) => {
+  pool.query("SELECT * FROM Brand", (error, results) => {
     if (error) {
-      console.error('Error fetching brands:', error);
-      res.status(500).json({ message: 'Error fetching brands' });
+      console.error("Error fetching brands:", error);
+      res.status(500).json({ message: "Error fetching brands" });
     } else {
       res.status(200).json({ data: results });
     }
@@ -566,7 +552,7 @@ router.get('/fetch-brands', (req, res) => {
 });
 
 // Update a brand
-router.put('/update-brand/:id', (req, res) => {
+router.put("/update-brand/:id", (req, res) => {
   const { brand_name, brand_description } = req.body;
   const { id } = req.params;
 
@@ -585,10 +571,10 @@ router.put('/update-brand/:id', (req, res) => {
 });
 
 // Delete a brand
-router.delete('/delete-brand/:id', (req, res) => {
+router.delete("/delete-brand/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM Brand WHERE brand_id=?', [id], (error, results) => {
+  pool.query("DELETE FROM Brand WHERE brand_id=?", [id], (error, results) => {
     if (error) {
       console.error(`Error deleting brand ${id}:`, error);
       res.status(500).json({ message: `Error deleting brand ${id}` });
@@ -597,5 +583,132 @@ router.delete('/delete-brand/:id', (req, res) => {
     }
   });
 });
+
+// Add a new stock
+router.post("/add-stock", async (req, res) => {
+  const { product_id, stock_quantity, created_by } = req.body;
+
+  const query = `
+    INSERT INTO Stock (product_id, stock_quantity, created_by)
+    VALUES (?, ?, ?)
+  `;
+
+  pool.query(
+    query,
+    [product_id, stock_quantity, created_by],
+    (error, results) => {
+      if (error) {
+        console.error("Error inserting stock:", error);
+        res.status(500).json({ message: "Error inserting stock" });
+      } else {
+        res
+          .status(200)
+          .json({
+            message: "Stock added successfully",
+            stockId: results.insertId,
+          });
+      }
+    }
+  );
+});
+
+// Fetch all stocks
+router.get("/fetch-stocks", (req, res) => {
+  pool.query(
+    " SELECT s.*, p.product_name FROM Stock s JOIN Products p ON s.product_id = p.product_id",
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching stocks:", error);
+        res.status(500).json({ message: "Error fetching stocks" });
+      } else {
+        res.status(200).json({ data: results });
+      }
+    }
+  );
+});
+
+// Update a stock
+router.put("/update-stock/:id", (req, res) => {
+  const { stock_quantity } = req.body;
+  const { id } = req.params;
+
+  pool.query(
+    `UPDATE Stock SET stock_quantity=? WHERE stock_id=?`,
+    [stock_quantity, id],
+    (error, results) => {
+      if (error) {
+        console.error(`Error updating stock ${id}:`, error);
+        res.status(500).json({ message: `Error updating stock ${id}` });
+      } else {
+        res.status(200).json({ message: `Stock ${id} updated successfully` });
+      }
+    }
+  );
+});
+
+// Delete a stock
+router.delete("/delete-stock/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query("DELETE FROM Stock WHERE stock_id=?", [id], (error, results) => {
+    if (error) {
+      console.error(`Error deleting stock ${id}:`, error);
+      res.status(500).json({ message: `Error deleting stock ${id}` });
+    } else {
+      res.status(200).json({ message: `Stock ${id} deleted successfully` });
+    }
+  });
+});
+
+// Add a new banner
+router.post('/add-banner', upload.single('picture'), async (req, res) => {
+  const {
+    title,
+    banner_description,
+    started_at,
+    ended_at,
+    status,
+    created_by
+  } = req.body;
+
+  console.log("body",req.body);
+  
+  const image = req.file;
+  console.log("img",image);
+
+  if (!image) {
+    return res.status(400).json({ message: 'Image file is required' });
+  }
+
+  const query = `
+    INSERT INTO Banners (title, banner_description, image_name, image_type, mime_type, image_size, started_at, ended_at, status, created_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  pool.query(
+    query,
+    [
+      title,
+      banner_description,
+      image.filename,
+      image.mimetype.split('/')[1],
+      image.mimetype,
+      image.size,
+      started_at,
+      ended_at,
+      status,
+      created_by,
+    ],
+    (error, results) => {
+      if (error) {
+        console.error('Error inserting banner:', error);
+        res.status(500).json({ message: 'Error inserting banner' });
+      } else {
+        res.status(200).json({ message: 'Banner added successfully', bannerId: results.insertId });
+      }
+    }
+  );
+});
+
 
 module.exports = router;

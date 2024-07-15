@@ -12,7 +12,7 @@ var categoryRouter=require("./routes/category");
 var productRouter = require("./routes/product");
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
@@ -25,18 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
-// cors setup
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    // exposedHeaders: ["Content-Type", "Authorization"],
-    // optionsSuccessStatus: 200,
-  })
-);
+
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/category",categoryRouter);
