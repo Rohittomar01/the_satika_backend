@@ -13,6 +13,11 @@ const productRouter = require("./routes/product");
 const offersRouter = require("./routes/offers");
 const discountsRouter = require("./routes/discounts");
 const promotionsRouter = require("./routes/promotions");
+const bannerRouter = require("./routes/banner");
+const wishlistRouter = require("./routes/wishlist");
+const addtocartRouter = require("./routes/add_to_cart");
+
+
 
 var app = express();
 // app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,6 +57,9 @@ app.use("/product", productRouter);
 app.use("/offers", offersRouter);
 app.use("/discounts", discountsRouter);
 app.use("/promotions", promotionsRouter);
+app.use("/banner", bannerRouter);
+app.use("/wishlist", wishlistRouter);
+app.use("/addtocart", addtocartRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
