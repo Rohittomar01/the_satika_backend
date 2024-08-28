@@ -159,135 +159,180 @@ router.get("/fetch_All_Products", function (req, res) {
       .json({ data: result, message: "categories Fetch Succesfully" });
   });
 });
-router.post("/fetch-products", function (req, res) {
-  const {
-    colors,
-    brands,
-    crafts,
-    fabrics,
-    origins,
-    minPrice,
-    maxPrice,
-    categoryName,
-  } = req.body;
-  console.log(req.body);
-  let query = `
-    SELECT p.*, pi.image_name, pi.mimetype, pi.size, pi.created_at AS image_created_at, pi.updated_at AS image_updated_at, pi.created_by AS image_created_by
-    FROM Products p
-    LEFT JOIN product_images pi ON p.product_id = pi.product_id
-    WHERE p.category = ?
+// router.post("/fetch-products", function (req, res) {
+//   const {
+//     colors,
+//     brands,
+//     crafts,
+//     fabrics,
+//     origins,
+//     minPrice,
+//     maxPrice,
+//     categoryName,
+//   } = req.body;
+//   console.log("ppppppp",req.body);
+//   let query = `
+//     SELECT p.*, pi.image_name, pi.mimetype, pi.size, pi.created_at AS image_created_at, pi.updated_at AS image_updated_at, pi.created_by AS image_created_by
+//     FROM Products p
+//     LEFT JOIN product_images pi ON p.product_id = pi.product_id
+//     WHERE p.category = ?
+//   `;
+//   let queryParams = [categoryName];
+
+//   if (colors) {
+//     const colorFilter = colors
+//       .split(",")
+//       .map((color) => `'${color}'`)
+//       .join(",");
+//     query += ` AND p.color IN (${colorFilter})`;
+//   }
+
+//   if (brands) {
+//     const brandFilter = brands
+//       .split(",")
+//       .map((brand) => `'${brand}'`)
+//       .join(",");
+//     query += ` AND p.brand IN (${brandFilter})`;
+//   }
+
+//   if (crafts) {
+//     const craftFilter = crafts
+//       .split(",")
+//       .map((craft) => `'${craft}'`)
+//       .join(",");
+//     query += ` AND p.craft IN (${craftFilter})`;
+//   }
+
+//   if (fabrics) {
+//     const fabricFilter = fabrics
+//       .split(",")
+//       .map((fabric) => `'${fabric}'`)
+//       .join(",");
+//     query += ` AND p.fabric IN (${fabricFilter})`;
+//   }
+
+//   if (origins) {
+//     const originFilter = origins
+//       .split(",")
+//       .map((origin) => `'${origin}'`)
+//       .join(",");
+//     query += ` AND p.origin IN (${originFilter})`;
+//   }
+
+//   // if (minPrice) {
+//   //   query += ` AND p.price >= ?`;
+//   //   queryParams.push(minPrice);
+//   // }
+
+//   // if (maxPrice) {
+//   //   query += ` AND p.price <= ?`;
+//   //   queryParams.push(maxPrice);
+//   // }
+
+//   pool.query(query, queryParams, function (error, results) {
+//     if (error) {
+//       console.log(error);
+//       res.status(500).json({ message: "Error fetching products" });
+//     } else {
+//       // Process the results to group images with their corresponding products
+//       const products = results.reduce((acc, row) => {
+//         // If product is not already in the accumulator, add it
+//         if (!acc[row.product_id]) {
+//           acc[row.product_id] = {
+//             product_id: row.product_id,
+//             product_name: row.product_name,
+//             product_description: row.product_description,
+//             price: row.price,
+//             discount: row.discount,
+//             stock: row.stock,
+//             trending: row.trending,
+//             new_arrival: row.new_arrival,
+//             top_selling: row.top_selling,
+//             category: row.category,
+//             occasion: row.occasion,
+//             craft: row.craft,
+//             fabric: row.fabric,
+//             color: row.color,
+//             origin: row.origin,
+//             brand: row.brand,
+//             created_at: row.created_at,
+//             updated_at: row.updated_at,
+//             created_by: row.created_by,
+//             images: [], // Initialize images array
+//           };
+//         }
+
+//         if (row.image_name) {
+//           acc[row.product_id].images.push({
+//             image_name: row.image_name,
+//             mimetype: row.mimetype,
+//             size: row.size,
+//             created_at: row.image_created_at,
+//             updated_at: row.image_updated_at,
+//             created_by: row.image_created_by,
+//           });
+//         }
+
+//         return acc;
+//       }, {});
+
+//       const productsArray = Object.values(products);
+//       console.log("productarray", productsArray);
+
+//       res.status(200).json({
+//         data: productsArray,
+//         message: "Products fetched successfully with images",
+//       });
+//     }
+//   });
+// });
+
+// fetch trending products
+
+router.get("/fetch-products", function (req, res) {
+  const sql = `
+    SELECT 
+      p.product_id, 
+      p.product_name, 
+      p.product_description, 
+      p.price, 
+      p.discount, 
+      p.stock, 
+      p.trending, 
+      p.new_arrival, 
+      p.top_selling, 
+      p.category, 
+      p.occasion, 
+      p.craft, 
+      p.fabric, 
+      p.color, 
+      p.origin, 
+      p.brand, 
+      p.created_at, 
+      p.updated_at, 
+      p.created_by,
+      pi.image_name
+    FROM 
+      products p
+    LEFT JOIN 
+      product_images pi ON p.product_id = pi.product_id
   `;
-  let queryParams = [categoryName];
 
-  if (colors) {
-    const colorFilter = colors
-      .split(",")
-      .map((color) => `'${color}'`)
-      .join(",");
-    query += ` AND p.color IN (${colorFilter})`;
-  }
-
-  if (brands) {
-    const brandFilter = brands
-      .split(",")
-      .map((brand) => `'${brand}'`)
-      .join(",");
-    query += ` AND p.brand IN (${brandFilter})`;
-  }
-
-  if (crafts) {
-    const craftFilter = crafts
-      .split(",")
-      .map((craft) => `'${craft}'`)
-      .join(",");
-    query += ` AND p.craft IN (${craftFilter})`;
-  }
-
-  if (fabrics) {
-    const fabricFilter = fabrics
-      .split(",")
-      .map((fabric) => `'${fabric}'`)
-      .join(",");
-    query += ` AND p.fabric IN (${fabricFilter})`;
-  }
-
-  if (origins) {
-    const originFilter = origins
-      .split(",")
-      .map((origin) => `'${origin}'`)
-      .join(",");
-    query += ` AND p.origin IN (${originFilter})`;
-  }
-
-  // if (minPrice) {
-  //   query += ` AND p.price >= ?`;
-  //   queryParams.push(minPrice);
-  // }
-
-  // if (maxPrice) {
-  //   query += ` AND p.price <= ?`;
-  //   queryParams.push(maxPrice);
-  // }
-
-  pool.query(query, queryParams, function (error, results) {
-    if (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error fetching products" });
+  pool.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch products' });
     } else {
-      // Process the results to group images with their corresponding products
-      const products = results.reduce((acc, row) => {
-        // If product is not already in the accumulator, add it
-        if (!acc[row.product_id]) {
-          acc[row.product_id] = {
-            product_id: row.product_id,
-            product_name: row.product_name,
-            product_description: row.product_description,
-            price: row.price,
-            discount: row.discount,
-            stock: row.stock,
-            trending: row.trending,
-            new_arrival: row.new_arrival,
-            top_selling: row.top_selling,
-            category: row.category,
-            occasion: row.occasion,
-            craft: row.craft,
-            fabric: row.fabric,
-            color: row.color,
-            origin: row.origin,
-            brand: row.brand,
-            created_at: row.created_at,
-            updated_at: row.updated_at,
-            created_by: row.created_by,
-            images: [], // Initialize images array
-          };
-        }
-
-        if (row.image_name) {
-          acc[row.product_id].images.push({
-            image_name: row.image_name,
-            mimetype: row.mimetype,
-            size: row.size,
-            created_at: row.image_created_at,
-            updated_at: row.image_updated_at,
-            created_by: row.image_created_by,
-          });
-        }
-
-        return acc;
-      }, {});
-
-      const productsArray = Object.values(products);
-      console.log("productarray", productsArray);
-
-      res.status(200).json({
-        data: productsArray,
-        message: "Products fetched successfully with images",
-      });
+      res.status(200).json({ data: results, message: "success product fetch" });
     }
   });
 });
 
-// fetch trending products
+
+
+
+
+
 router.get("/fetch-Trendingproducts", function (req, res) {
   const query = `
     SELECT p.*, pi.image_name, pi.mimetype, pi.size
