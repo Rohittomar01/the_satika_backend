@@ -16,6 +16,7 @@ const promotionsRouter = require("./routes/promotions");
 const bannerRouter = require("./routes/banner");
 const wishlistRouter = require("./routes/wishlist");
 const addtocartRouter = require("./routes/add_to_cart");
+const reviewsRouter = require("./routes/reviews");
 
 
 
@@ -56,6 +57,7 @@ app.use("/promotions", promotionsRouter);
 app.use("/banner", bannerRouter);
 app.use("/wishlist", wishlistRouter);
 app.use("/addtocart", addtocartRouter);
+app.use("/reviews", reviewsRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

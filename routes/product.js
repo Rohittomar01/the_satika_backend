@@ -147,7 +147,7 @@ router.post("/upload-file", upload.single("file"), function (req, res) {
 });
 
 router.get("/fetch_All_Products", function (req, res) {
-  const sql = "SELECT * FROM products"; // Adjust the SQL query as needed
+  const sql = "SELECT * FROM products";
 
   pool.query(sql, function (err, result) {
     if (err) {
@@ -156,9 +156,138 @@ router.get("/fetch_All_Products", function (req, res) {
     }
     res
       .status(200)
-      .json({ data: result, message: "categories Fetch Succesfully" });
+      .json({ data: result, message: "product Fetch Succesfully" });
   });
 });
+
+router.get("/fetch-AllProductsWithImage", function (req, res) {
+  const query = `
+    SELECT p.*, pi.image_name, pi.mimetype, pi.size
+    FROM Products p
+    LEFT JOIN product_images pi ON p.product_id = pi.product_id
+  `;
+
+  pool.query(query, function (error, results) {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error fetching products" });
+    } else {
+      // Process the results to group images with their corresponding products
+      const products = results.reduce((acc, row) => {
+        // If product is not already in the accumulator, add it
+        if (!acc[row.product_id]) {
+          acc[row.product_id] = {
+            product_id: row.product_id,
+            product_name: row.product_name,
+            product_description: row.product_description,
+            price: row.price,
+            discount: row.discount,
+            stock: row.stock,
+            trending: row.trending,
+            new_arrival: row.new_arrival,
+            top_selling: row.top_selling,
+            category: row.category,
+            occasion: row.occasion,
+            craft: row.craft,
+            fabric: row.fabric,
+            color: row.color,
+            origin: row.origin,
+            brand: row.brand,
+            created_at: row.created_at,
+            updated_at: row.updated_at,
+            created_by: row.created_by,
+            images: [], // Initialize images array
+          };
+        }
+
+        if (row.image_name) {
+          acc[row.product_id].images.push({
+            image_name: row.image_name,
+            mimetype: row.mimetype,
+            size: row.size,
+            created_at: row.image_created_at,
+            updated_at: row.image_updated_at,
+            created_by: row.image_created_by,
+          });
+        }
+
+        return acc;
+      }, {});
+
+      const productsArray = Object.values(products);
+
+      res.status(200).json({
+        data: productsArray,
+        message: "Products fetched successfully with images",
+      });
+    }
+  });
+});
+
+router.get("/fetch_all_Images", function (req, res) {
+  let query = `
+    SELECT p.*, pi.image_name, pi.mimetype, pi.size, pi.created_at AS image_created_at, pi.updated_at AS image_updated_at, pi.created_by AS image_created_by
+    FROM Products p
+    LEFT JOIN product_images pi ON p.product_id = pi.product_id
+  `;
+
+  pool.query(query, [], function (error, results) {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error fetching products" });
+    } else {
+      // Process the results to group images with their corresponding products
+      const products = results.reduce((acc, row) => {
+        // If product is not already in the accumulator, add it
+        if (!acc[row.product_id]) {
+          acc[row.product_id] = {
+            product_id: row.product_id,
+            product_name: row.product_name,
+            product_description: row.product_description,
+            price: row.price,
+            discount: row.discount,
+            stock: row.stock,
+            trending: row.trending,
+            new_arrival: row.new_arrival,
+            top_selling: row.top_selling,
+            category: row.category,
+            occasion: row.occasion,
+            craft: row.craft,
+            fabric: row.fabric,
+            color: row.color,
+            origin: row.origin,
+            brand: row.brand,
+            created_at: row.created_at,
+            updated_at: row.updated_at,
+            created_by: row.created_by,
+            images: [], // Initialize images array
+          };
+        }
+
+        if (row.image_name) {
+          acc[row.product_id].images.push({
+            image_name: row.image_name,
+            mimetype: row.mimetype,
+            size: row.size,
+            created_at: row.image_created_at,
+            updated_at: row.image_updated_at,
+            created_by: row.image_created_by,
+          });
+        }
+
+        return acc;
+      }, {});
+
+      const productsArray = Object.values(products);
+
+      res.status(200).json({
+        data: productsArray,
+        message: "Products fetched successfully with images",
+      });
+    }
+  });
+});
+
 router.post("/fetch-products", function (req, res) {
   const {
     colors,

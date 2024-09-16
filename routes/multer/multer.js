@@ -1,16 +1,24 @@
-var multer =require('multer');
+var multer = require("multer");
 
-const storage =multer.diskStorage({
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
 
-    destination:function(req,file,cb){
-        cb(null,'public/images');
-    },
-    filename:function(req,file,cb){
+const video = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/videos");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
 
-        cb(null,file.originalname);
-    },
-})
+const upload = multer({ storage: storage });
+const uploadVidoes = multer({ storage: video });
 
-const upload=multer({storage:storage});
-
-module.exports=upload;
+module.exports = upload;

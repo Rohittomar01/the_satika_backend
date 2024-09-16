@@ -3,13 +3,20 @@ var router = express.Router();
 var pool = require("./pool/pool.js");
 var upload = require("./multer/multer.js");
 
-router.post("/submitCategory_Data",upload.single("file"), function (req, res) {
+router.post("/submitCategory_Data", upload.single("file"), function (req, res) {
   const { name, description, created_at, created_by, updated_at } = req.body;
   const picture = req.file.originalname;
 
   const sql =
     "INSERT INTO category ( category_name, category_description,category_pic, created_at, created_by, updated_at) VALUES (?,?, ?, ?,?,?)";
-  const values = [name, description,picture, created_at, created_by, updated_at];
+  const values = [
+    name,
+    description,
+    picture,
+    created_at,
+    created_by,
+    updated_at,
+  ];
 
   pool.query(sql, values, function (err, result) {
     if (err) {
@@ -20,8 +27,6 @@ router.post("/submitCategory_Data",upload.single("file"), function (req, res) {
     res.status(200).json({ message: "Data submitted successfully" });
   });
 });
-
-
 
 router.get("/fetch_Categories", function (req, res) {
   const sql = "SELECT * FROM category"; // Adjust the SQL query as needed
@@ -39,7 +44,7 @@ router.get("/fetch_Categories", function (req, res) {
 
 router.delete("/delete_Category", function (req, res) {
   const categoryId = req.body.id;
-  const sql = "DELETE FROM category WHERE category_id = ?"; // Adjust the SQL query as needed
+  const sql = "DELETE FROM category WHERE category_id = ?";
 
   pool.query(sql, [categoryId], function (err, result) {
     if (err) {
